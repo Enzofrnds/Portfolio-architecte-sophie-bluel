@@ -42,6 +42,12 @@ q:before, q:after {
 	content: '';
 	content: none;
 }
+
+a{
+	text-decoration: none;
+	color: inherit;
+}
+
 table {
 	border-collapse: collapse;
 	border-spacing: 0;
@@ -95,8 +101,12 @@ nav li {
 	font-size: 1.2em;
 }
 
+nav li img{
+	width: 22px;
+}
+
 li:hover {
-	color: #B1663C;
+	font-weight: 700;
 }
 #introduction {
 	display: flex;

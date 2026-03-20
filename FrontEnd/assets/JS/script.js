@@ -28,7 +28,6 @@ async function fliterByCategory() {
 
             if (category === 'Tous'){
                 document.querySelector('.gallery').innerHTML = '';
-                console.log(work);
                 generateWorks();
             }
             else{
