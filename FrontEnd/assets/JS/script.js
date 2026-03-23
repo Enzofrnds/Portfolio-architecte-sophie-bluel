@@ -1,49 +1,53 @@
-async function generateWorks() {
+async function getWorks() {
     const reponse = await fetch('http://localhost:5678/api/works');
-    const works = await reponse.json();
+    return await reponse.json();
+}
 
-    for (let i = 0; i < works.length; i++) {
-        const work = works[i];
+
+function generateWorks(works) {
+    const gallery = document.querySelector('.gallery');
+    gallery.innerHTML = ''; 
+    
+    works.forEach(work => {
         const workElement = document.createElement('figure');
         workElement.innerHTML = `
             <img src="${work.imageUrl}" alt="${work.title}">
             <figcaption>${work.title}</figcaption>
         `;
-        document.querySelector('.gallery').appendChild(workElement);
-    }
+        gallery.appendChild(workElement);
+    });
 }
 
-generateWorks();
+async function init() {
+    const works = await getWorks();
+    generateWorks(works);
+    setupFilters(works);
+}
 
-async function fliterByCategory() {
-    const reponse = await fetch(`http://localhost:5678/api/works`);
-    const work = await reponse.json();
+
+function setupFilters(works) {
     const btns = document.querySelectorAll('.btn-filter');
+
     btns.forEach(btn => {
         btn.addEventListener('click', () => {
+
             btns.forEach(btn => btn.classList.remove('active'));
             btn.classList.add('active');
 
-            const category = btn.innerText;
+            const categoryName = btn.innerText;
 
-            if (category === 'Tous'){
-                document.querySelector('.gallery').innerHTML = '';
-                generateWorks();
+            let filteredWorks;
+
+            if (categoryName === 'Tous') {
+                filteredWorks = works;
+            } else {
+                filteredWorks = works.filter(work => work.category.name === categoryName);
             }
-            else{
-                const filteredWorks = work.filter(work => work.category.name === category);
-                document.querySelector('.gallery').innerHTML = '';
-                filteredWorks.forEach(work => {
-                    const workElement = document.createElement('figure');
-                    workElement.innerHTML = `
-                        <img src="${work.imageUrl}" alt="${work.title}">
-                        <figcaption>${work.title}</figcaption>
-                    `;
-                    document.querySelector('.gallery').appendChild(workElement);
-                });
-            }
-        })
-    })
+
+            generateWorks(filteredWorks);
+            
+        });
+    });
 }
 
-fliterByCategory();
+init();
