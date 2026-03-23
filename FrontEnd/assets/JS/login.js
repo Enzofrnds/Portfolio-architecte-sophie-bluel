@@ -1,9 +1,11 @@
 const email = document.getElementById("email");
 const password = document.getElementById("password");
 const btn = document.getElementById("btn-login");
+const errorMessage = document.getElementById("error-message");
 
 btn.addEventListener("click", async (event) => {
     event.preventDefault();
+    errorMessage.textContent = ""; // Réinitialise le message d'erreur
     const response = await fetch('http://localhost:5678/api/users/login', {
         method: 'POST',
         headers: {
@@ -19,6 +21,6 @@ btn.addEventListener("click", async (event) => {
         localStorage.setItem('token', data.token);
         window.location.href = 'index.html';
     } else {
-        alert("Erreur dans l’identifiant ou le mot de passe");
+        errorMessage.textContent = "Erreur dans l’identifiant ou le mot de passe !";
     }
 });
