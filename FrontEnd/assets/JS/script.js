@@ -3,6 +3,11 @@ async function getWorks() {
     return await reponse.json();
 }
 
+async function getCategories() {
+    const reponse = await fetch('http://localhost:5678/api/categories');
+    return await reponse.json();
+}
+
 
 function generateWorks(works) {
     const gallery = document.querySelector('.gallery');
@@ -20,12 +25,29 @@ function generateWorks(works) {
 
 async function init() {
     const works = await getWorks();
+    const categories = await getCategories();
     generateWorks(works);
-    setupFilters(works);
+    setupFilters(works, categories);
+    Logout();
 }
 
 
-function setupFilters(works) {
+function setupFilters(works, categories) {
+    const filterContainer = document.querySelector('.filters');
+
+    const btnTous = document.createElement('button');
+    btnTous.classList.add('btn-filter', 'active');
+    btnTous.innerText = 'Tous';
+    filterContainer.appendChild(btnTous);
+
+    categories.forEach(category => {
+        const btn = document.createElement('button');
+        btn.classList.add('btn-filter');
+        btn.innerText = category.name;
+        btn.dataset.id = category.id;
+        filterContainer.appendChild(btn);
+    });
+
     const btns = document.querySelectorAll('.btn-filter');
 
     btns.forEach(btn => {
@@ -41,7 +63,7 @@ function setupFilters(works) {
             if (categoryName === 'Tous') {
                 filteredWorks = works;
             } else {
-                filteredWorks = works.filter(work => work.category.name === categoryName);
+                filteredWorks = works.filter(work => work.categoryId === parseInt(btn.dataset.id));
             }
 
             generateWorks(filteredWorks);
@@ -50,4 +72,20 @@ function setupFilters(works) {
     });
 }
 
+function Logout() {
+    const loginLink = document.querySelector('.login-link');
+    const token = localStorage.getItem('token');
+
+    if (token) {
+        loginLink.innerText = 'logout';
+        loginLink.href = '#';
+        loginLink.addEventListener('click', (event) => {
+            event.preventDefault();
+            localStorage.removeItem('token');
+            window.location.reload();
+        });
+    }
+}
+
 init();
+

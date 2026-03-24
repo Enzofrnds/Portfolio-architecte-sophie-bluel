@@ -43,7 +43,7 @@ nav ul {
 
 }
 
-.active {
+.nav-active {
     font-weight: 700;
 }
 
@@ -103,6 +103,12 @@ button {
     font-weight: 500;
     cursor: pointer;
     margin-top: 40px;
+}
+
+#error-message {
+    color: red;
+    font-family: 'Work Sans';
+    margin-bottom: 10px;
 }
 
 .mdp-oublie{
