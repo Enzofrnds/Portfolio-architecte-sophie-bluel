@@ -28,6 +28,7 @@ async function init() {
     const categories = await getCategories();
     generateWorks(works);
     setupFilters(works, categories);
+    adminDisplay();
     Logout();
 }
 
@@ -72,9 +73,17 @@ function setupFilters(works, categories) {
     });
 }
 
-function Logout() {
-    const loginLink = document.querySelector('.login-link');
+function adminDisplay() {
     const token = localStorage.getItem('token');
+    const edit = document.querySelector('.edit');
+    if (token) {
+        edit.style.display = 'flex';
+    }
+}
+
+function Logout() {
+    const token = localStorage.getItem('token');
+    const loginLink = document.querySelector('.login-link');
 
     if (token) {
         loginLink.innerText = 'logout';
