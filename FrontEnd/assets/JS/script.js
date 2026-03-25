@@ -76,8 +76,12 @@ function setupFilters(works, categories) {
 function adminDisplay() {
     const token = localStorage.getItem('token');
     const edit = document.querySelector('.edit');
+    const filterContainer = document.querySelector('.filters');
+    const btnEdit = document.querySelector('.btn-edit');
     if (token) {
         edit.style.display = 'flex';
+        filterContainer.style.visibility = 'hidden';
+        btnEdit.style.display = 'flex';
     }
 }
 
