@@ -1,3 +1,5 @@
+import { adminDisplay, loadPopup } from './popup.js';
+
 async function getWorks() {
     const reponse = await fetch('http://localhost:5678/api/works');
     return await reponse.json();
@@ -30,6 +32,7 @@ async function init() {
     setupFilters(works, categories);
     adminDisplay();
     Logout();
+    loadPopup(works);
 }
 
 
@@ -73,18 +76,6 @@ function setupFilters(works, categories) {
     });
 }
 
-function adminDisplay() {
-    const token = localStorage.getItem('token');
-    const edit = document.querySelector('.edit');
-    const filterContainer = document.querySelector('.filters');
-    const btnEdit = document.querySelector('.btn-edit');
-    if (token) {
-        edit.style.display = 'flex';
-        filterContainer.style.visibility = 'hidden';
-        btnEdit.style.display = 'flex';
-    }
-}
-
 function Logout() {
     const token = localStorage.getItem('token');
     const loginLink = document.querySelector('.login-link');
@@ -101,4 +92,3 @@ function Logout() {
 }
 
 init();
-
