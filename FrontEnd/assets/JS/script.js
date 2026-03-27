@@ -1,4 +1,4 @@
-import { adminDisplay, loadPopup } from './popup.js';
+import { adminDisplay, loadPopup } from './edit.js';
 
 async function getWorks() {
     const reponse = await fetch('http://localhost:5678/api/works');

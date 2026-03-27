@@ -45,10 +45,17 @@ a {
 	height: 688px;
 	border-radius: 10px;
 	box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.6);
+	.fa-arrow-left{
+		cursor: pointer;
+		position: absolute;
+		font-size: 18px;
+		top: 20px;
+		left: 20px;
+	}
 	.fa-xmark{
 		cursor: pointer;
 		position: absolute;
-		width: 12px;
+		font-size: 18px;
 		top: 20px;
 		right: 20px;
 	}
@@ -63,6 +70,70 @@ a {
 		padding: 20px;
 		width: 75%;
 		box-sizing: border-box;
+		.ajout-img{
+			margin-top: 40px;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			background-color: #E8F1F6;
+			padding: 25px;
+			i{
+				color: #B9C5CC;
+				font-size: 4em;
+				margin-bottom: 20px;
+			}
+			button{
+				cursor: pointer;
+				background-color: #CBD6DC;
+				color: #306685;
+				border-radius: 50px;
+				padding: 10px;
+				margin-bottom: 10px;
+			}
+		}
+		form{
+			margin-top: 20px;
+			display: flex;
+			justify-content: center;
+			align-items: stretch;
+			flex-direction: column;
+			gap: 10px;
+			label{
+				width: 100%;
+				text-align: left;
+			}
+			input{
+				width: 100%;
+				height: 51px;
+				border-radius: 5px;
+				padding: 0 10px;
+				box-sizing: border-box;
+				box-shadow: 0px 4px 14px $shadow-color;
+				margin-bottom: 15px;
+			}
+			select{
+				width: 100%;
+				height: 51px;
+				border-radius: 5px;
+				background-color: white;
+				box-shadow: 0px 4px 14px $shadow-color;
+				padding-left: 20px;
+			}
+		}
+		.btn-valider{
+			display: block;
+			font-family: $font-family-title;
+			font-weight: 700;
+			color: $white;
+			background-color: #A7A7A7;
+			margin: 2em auto;
+			padding: 10px;
+			width: 180px;
+			text-align: center;
+			border-radius: 60px;
+			cursor: pointer;
+		}
 		.popup-gallery{
 			display: grid;
 			grid-template-columns: repeat(5, 1fr);
