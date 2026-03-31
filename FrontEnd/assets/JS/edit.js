@@ -1,16 +1,8 @@
-let popupActive = false;
-
 const popup = document.querySelector('.popup');
 const popupContent = document.querySelector('.popup-content');
-const page = document.querySelector('.page-content');
-const pageSections = document.querySelectorAll('header, main, footer, .edit');
 
 function closePopup() {
     popup.style.visibility = 'hidden';
-    pageSections.forEach((section) => {
-        section.style.pointerEvents = 'auto';
-    });
-    popupActive = false;
 }
 
 export function adminDisplay() {
@@ -25,35 +17,31 @@ export function adminDisplay() {
     }
 
     btnEdit.addEventListener('click', (event) => {
-        event.stopPropagation();
         popup.style.visibility = 'visible';
-        popupActive = true;
-        pageSections.forEach((section) => {
-            section.style.pointerEvents = 'none';
-        });
     });
 }
 
 export function loadPopup(works) {
 
     loadPopupGallery(works);
+    changePage(works);
 
-    page.addEventListener('click', () => {
-        if (!popupActive) {
-            return;
+    popup.addEventListener('click', (event) => {
+        if (event.target === popup) {
+            closePopup();
         }
-        closePopup();
-    });
+    })
 
     popupContent.addEventListener('click', (event) => {
-        if (!event.target.closest('.fa-xmark')) {
-            return;
+        if (event.target.classList.contains('fa-xmark')) {
+            closePopup();
         }
-        event.stopPropagation();
-        closePopup();
-    });
 
-    changePage(works);
+        if (event.target.classList.contains('fa-arrow-left')) {
+            loadPopupGallery(works);
+            changePage(works);
+        }
+    });
 
 }
 
@@ -62,35 +50,27 @@ function changePage(works) {
     btnAddPhoto.addEventListener('click', () => {
         popupContent.innerHTML = '';
         popupContent.innerHTML = `
-    <i class="fa-solid fa-arrow-left"></i>
-    <i class="fa-solid fa-xmark"></i>
-    <h2>Ajout image</h2>
-    <div class="ajout-img">
-    <i class="fa-solid fa-image"></i>
-    <button class="btn-photo">+ Ajouter photo</button>
-    <p>jpg, png : 4mo max</p>
-    </div>
-    <form action="">
-    <label for="title">Titre</label>
-    <input type="text" name="title" id="title">
-    <label for="category">Catégorie</label>
-    <select name="category" id="category">
-    <option value="0"></option>
-    <option value="1">Objets</option>
-    <option value="2">Appartements</option>
-    <option value="3">Hôtels & restaurants</option>
-    </select>
-    </form>
-    <span class="popup-border"></span>
-    <button class="btn-valider">Valider</button>`;
-    });
-
-    popupContent.addEventListener('click', (event) => {
-        if (event.target.closest('.fa-arrow-left')) {
-            popupContent.innerHTML = '';
-            loadPopupGallery(works);
-            changePage(works);
-        }
+        <i class="fa-solid fa-arrow-left"></i>
+        <i class="fa-solid fa-xmark"></i>
+        <h2>Ajout image</h2>
+        <div class="ajout-img">
+        <i class="fa-solid fa-image"></i>
+        <button class="btn-photo">+ Ajouter photo</button>
+        <p>jpg, png : 4mo max</p>
+        </div>
+        <form action="">
+        <label for="title">Titre</label>
+        <input type="text" name="title" id="title">
+        <label for="category">Catégorie</label>
+        <select name="category" id="category">
+        <option value="0"></option>
+        <option value="1">Objets</option>
+        <option value="2">Appartements</option>
+        <option value="3">Hôtels & restaurants</option>
+        </select>
+        </form>
+        <span class="popup-border"></span>
+        <button class="btn-valider">Valider</button>`;
     });
 }
 
@@ -113,5 +93,31 @@ function loadPopupGallery(works) {
             <img src="${work.imageUrl}" alt="${work.title}">
         `;
         popupGallery.appendChild(workElement);
+
+        const btnDelete = workElement.querySelector('.fa-trash-can');
+        btnDelete.addEventListener('click', async () => {
+            const success = await deleteWork(work.id);
+            if (success) {
+                refreshAllGalleries();
+            }
+        });
     });
+
+}
+
+async function deleteWork(workId) {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`http://localhost:5678/api/works/${workId}`, {
+        method: 'DELETE',
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
+    return response.ok;
+}
+
+async function refreshAllGalleries() {
+    const reponse = await fetch('http://localhost:5678/api/works');
+    const updatedWorks = await reponse.json();
+    loadPopupGallery(updatedWorks);
 }
