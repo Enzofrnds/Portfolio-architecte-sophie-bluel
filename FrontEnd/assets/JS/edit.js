@@ -119,5 +119,17 @@ async function deleteWork(workId) {
 async function refreshAllGalleries() {
     const reponse = await fetch('http://localhost:5678/api/works');
     const updatedWorks = await reponse.json();
+
+    const gallery = document.querySelector('.gallery');
+    gallery.innerHTML = '';
+    updatedWorks.forEach(work => {
+        const workElement = document.createElement('figure');
+        workElement.innerHTML = `
+            <img src="${work.imageUrl}" alt="${work.title}">
+            <figcaption>${work.title}</figcaption>
+        `;
+        gallery.appendChild(workElement);
+    });
+
     loadPopupGallery(updatedWorks);
 }
