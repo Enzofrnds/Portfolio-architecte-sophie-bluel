@@ -43,7 +43,7 @@ function setupFilters(works, categories) {
     const filterContainer = document.querySelector('.filters');
 
     const btnTous = document.createElement('button');
-    btnTous.classList.add('btn-filter', 'active');
+    btnTous.classList.add('btn-filter', 'filter-active');
     btnTous.innerText = 'Tous';
     filterContainer.appendChild(btnTous);
 
@@ -106,9 +106,31 @@ init();
 
 const popup = document.querySelector('.popup');
 const popupContent = document.querySelector('.popup-content');
+const popupForm = document.querySelector('.popup-form');
 
 function closePopup() {
-    popup.style.visibility = 'hidden';
+    const btnsClose = document.querySelectorAll('.fa-xmark');
+    btnsClose.forEach(btn => {
+        btn.addEventListener('click', () => {
+            popup.classList.remove('active');
+            popup.classList.add('inactive');
+            popupContent.classList.remove('active');
+            popupContent.classList.add('inactive');
+            popupForm.classList.remove('active');
+            popupForm.classList.add('inactive');
+        });
+    })
+
+    popup.addEventListener('click', (event) => {
+        if (event.target === popup) {
+            popup.classList.remove('active');
+            popup.classList.add('inactive');
+            popupContent.classList.remove('active');
+            popupContent.classList.add('inactive');
+            popupForm.classList.remove('active');
+            popupForm.classList.add('inactive');
+        }
+    })
 }
 
 function adminDisplay() {
@@ -118,13 +140,17 @@ function adminDisplay() {
     const filterContainer = document.querySelector('.filters');
     const btnEdit = document.querySelector('.btn-edit');
     if (token) {
-        edit.style.display = 'flex';
-        filterContainer.style.visibility = 'hidden';
-        btnEdit.style.display = 'flex';
+        edit.classList.remove('inactive');
+        edit.classList.add('active');
+        filterContainer.classList.add('inactive');
+        filterContainer.classList.remove('active');
+        btnEdit.classList.remove('inactive');
+        btnEdit.classList.add('active');
     }
 
     btnEdit.addEventListener('click', (event) => {
-        popup.style.visibility = 'visible';
+        popup.classList.add('active');
+        popupContent.classList.add('active');
     });
 }
 
@@ -132,72 +158,30 @@ function loadPopup(works) {
 
     loadPopupGallery(works);
     changePage(works);
-
-    popup.addEventListener('click', (event) => {
-        if (event.target === popup) {
-            closePopup();
-        }
-    })
+    closePopup();
 }
 
 function changePage(works) {
     // au clic sur le bouton "Ajouter une photo", on change le contenu de la popup pour afficher le formulaire d'ajout de photo
     const btnAddPhoto = document.querySelector('.btn-add-photo');
     btnAddPhoto.addEventListener('click', () => {
-        popupContent.innerHTML = '';
-        popupContent.innerHTML = `
-        <i class="fa-solid fa-arrow-left"></i>
-        <i class="fa-solid fa-xmark"></i>
-        <h2>Ajout image</h2>
-        <div class="ajout-img">
-        <i class="fa-solid fa-image"></i>
-        <button class="btn-photo">+ Ajouter photo</button>
-        <p>jpg, png : 4mo max</p>
-        </div>
-        <form action="">
-        <label for="title">Titre</label>
-        <input type="text" name="title" id="title">
-        <label for="category">Catégorie</label>
-        <select name="category" id="category">
-        <option value="0"></option>
-        <option value="1">Objets</option>
-        <option value="2">Appartements</option>
-        <option value="3">Hôtels & restaurants</option>
-        </select>
-        </form>
-        <span class="popup-border"></span>
-        <button class="btn-valider">Valider</button>`;
+        popupContent.classList.remove('active');
+        popupContent.classList.add('inactive');
+        popupForm.classList.remove('inactive');
+        popupForm.classList.add('active');
 
         // ajout des eventListener pour les boutons
         const btnBack = document.querySelector('.fa-arrow-left');
         btnBack.addEventListener('click', () => {
-            loadPopupGallery(works);
-        });
-        const btnClose = document.querySelector('.fa-xmark');
-        btnClose.addEventListener('click', () => {
-            closePopup();
+            popupForm.classList.remove('active');
+            popupForm.classList.add('inactive');
+            popupContent.classList.remove('inactive');
+            popupContent.classList.add('active');
         });
     });
 }
 
 function loadPopupGallery(works) {
-
-    // génération du contenu de la popup
-    popupContent.innerHTML = `
-    <i class="fa-solid fa-xmark"></i>
-    <h2>Galerie photo</h2>
-    <div class="popup-gallery">
-    </div>
-    <span class="popup-border"></span>
-    <button class="btn-add-photo">Ajouter une photo</button>
-    `;
-
-    // ajout des eventListener pour les boutons
-    const btnClose = document.querySelector('.fa-xmark');
-        btnClose.addEventListener('click', () => {
-            closePopup();
-        });
-
     //ajout des éléments de la galerie dans la popup
     const popupGallery = document.querySelector('.popup-gallery');
     popupGallery.innerHTML = '';
@@ -212,8 +196,8 @@ function loadPopupGallery(works) {
         // au clic sur l'icône de poubelle, on supprime le travail correspondant et on rafraîchit la galerie
         const btnDelete = workElement.querySelector('.fa-trash-can');
         btnDelete.addEventListener('click', async () => {
-            const deleteResponse = await deleteWork(work.id);
-            if (deleteResponse) {
+            const success = await deleteWork(work.id);
+            if (success) {
                 refreshAllGalleries();
             }
         });

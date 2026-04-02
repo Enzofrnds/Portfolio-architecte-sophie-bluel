@@ -11,6 +11,13 @@
 	vertical-align: baseline;
 }
 
+.inactive{
+	visibility: hidden;
+}
+.active{
+	visibility: visible;
+}
+
 body {
 	line-height: 1;
 	display: flex;
@@ -31,7 +38,6 @@ a {
 }
 
 .popup{
-	visibility: hidden;
 	box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.6);
 	position: fixed;
 	z-index: 999;
@@ -75,6 +81,7 @@ a {
 		height: 688px;
 		border-radius: 10px;
 		.ajout-img{
+			width: 75%;
 			margin-top: 40px;
 			display: flex;
 			flex-direction: column;
@@ -87,7 +94,7 @@ a {
 				font-size: 4em;
 				margin-bottom: 20px;
 			}
-			button{
+			.label-btn{
 				cursor: pointer;
 				background-color: #CBD6DC;
 				color: #306685;
@@ -95,20 +102,26 @@ a {
 				padding: 10px;
 				margin-bottom: 10px;
 			}
+
+			.input-file{
+				display: none;
+			}
 		}
 		form{
+			width: 100%;
 			margin-top: 20px;
 			display: flex;
 			justify-content: center;
-			align-items: stretch;
+			align-items: center;
 			flex-direction: column;
 			gap: 10px;
 			label{
-				width: 100%;
+				width: 75%;
 				text-align: left;
 			}
-			input{
-				width: 100%;
+
+			#title{
+				width: 80%;
 				height: 51px;
 				border-radius: 5px;
 				padding: 0 10px;
@@ -117,7 +130,7 @@ a {
 				margin-bottom: 15px;
 			}
 			select{
-				width: 100%;
+				width: 80%;
 				height: 51px;
 				border-radius: 5px;
 				background-color: white;
@@ -143,6 +156,7 @@ a {
 			grid-template-columns: repeat(5, 1fr);
 			gap: 10px;
 			margin: 20px auto;
+			overflow-y: scroll;
 			figure{
 				img{
 					width: 78px;
@@ -188,12 +202,15 @@ a {
 }
 
 .edit{
-	display: none;
+	display: flex;
+	position: absolute;
+	top: 0;
+	left: 0;
 	justify-content: center;
 	align-items: center;
-	margin-bottom: 10px;
 	gap: 10px;
-	padding: 25px;
+	padding: 10px;
+	height: 25px;
 	background-color: black;
 	width: 100%;
 	p{
@@ -258,7 +275,7 @@ main {
 		top: 10px;
 		left: 50%;
 		margin-left: 115px;
-		display: none;
+		display: flex;
 		justify-content: center;
 		align-items: center;
 		gap: 10px;
@@ -272,7 +289,6 @@ main {
 		display: flex;
 		justify-content: center;
 		gap: 10px;
-
 		.btn-filter {
 			background-color: transparent;
 			border: 1px solid $primary-color;
@@ -285,7 +301,7 @@ main {
 			color: $primary-color;
 			cursor: pointer;
 
-			&.active, &:hover {
+			&.fliter-active, &:hover {
 				background-color: $primary-color;
 				color: $white;
 			}

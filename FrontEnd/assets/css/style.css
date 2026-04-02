@@ -59,6 +59,14 @@ footer nav ul {
   vertical-align: baseline;
 }
 
+.inactive {
+  visibility: hidden;
+}
+
+.active {
+  visibility: visible;
+}
+
 body {
   line-height: 1;
   display: flex;
@@ -79,7 +87,6 @@ a {
 }
 
 .popup {
-  visibility: hidden;
   box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.6);
   position: fixed;
   z-index: 999;
@@ -125,6 +132,7 @@ a {
   border-radius: 10px;
 }
 .popup .popup-content .ajout-img {
+  width: 75%;
   margin-top: 40px;
   display: flex;
   flex-direction: column;
@@ -138,7 +146,7 @@ a {
   font-size: 4em;
   margin-bottom: 20px;
 }
-.popup .popup-content .ajout-img button {
+.popup .popup-content .ajout-img .label-btn {
   cursor: pointer;
   background-color: #CBD6DC;
   color: #306685;
@@ -146,20 +154,24 @@ a {
   padding: 10px;
   margin-bottom: 10px;
 }
+.popup .popup-content .ajout-img .input-file {
+  display: none;
+}
 .popup .popup-content form {
+  width: 100%;
   margin-top: 20px;
   display: flex;
   justify-content: center;
-  align-items: stretch;
+  align-items: center;
   flex-direction: column;
   gap: 10px;
 }
 .popup .popup-content form label {
-  width: 100%;
+  width: 75%;
   text-align: left;
 }
-.popup .popup-content form input {
-  width: 100%;
+.popup .popup-content form #title {
+  width: 80%;
   height: 51px;
   border-radius: 5px;
   padding: 0 10px;
@@ -168,7 +180,7 @@ a {
   margin-bottom: 15px;
 }
 .popup .popup-content form select {
-  width: 100%;
+  width: 80%;
   height: 51px;
   border-radius: 5px;
   background-color: white;
@@ -193,6 +205,7 @@ a {
   grid-template-columns: repeat(5, 1fr);
   gap: 10px;
   margin: 20px auto;
+  overflow-y: scroll;
 }
 .popup .popup-content .popup-gallery figure img {
   width: 78px;
@@ -234,12 +247,15 @@ a {
 }
 
 .edit {
-  display: none;
+  display: flex;
+  position: absolute;
+  top: 0;
+  left: 0;
   justify-content: center;
   align-items: center;
-  margin-bottom: 10px;
   gap: 10px;
-  padding: 25px;
+  padding: 10px;
+  height: 25px;
   background-color: black;
   width: 100%;
 }
@@ -298,7 +314,7 @@ main {
   top: 10px;
   left: 50%;
   margin-left: 115px;
-  display: none;
+  display: flex;
   justify-content: center;
   align-items: center;
   gap: 10px;
@@ -324,7 +340,7 @@ main {
   color: #1D6154;
   cursor: pointer;
 }
-#portfolio .filters .btn-filter.active, #portfolio .filters .btn-filter:hover {
+#portfolio .filters .btn-filter.fliter-active, #portfolio .filters .btn-filter:hover {
   background-color: #1D6154;
   color: #FFFFFF;
 }
