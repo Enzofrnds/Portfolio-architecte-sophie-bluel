@@ -59,6 +59,10 @@ footer nav ul {
   vertical-align: baseline;
 }
 
+.noscroll {
+  overflow: clip;
+}
+
 .inactive {
   visibility: hidden;
 }

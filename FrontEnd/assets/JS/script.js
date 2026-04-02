@@ -118,6 +118,7 @@ function closePopup() {
             popupContent.classList.add('inactive');
             popupForm.classList.remove('active');
             popupForm.classList.add('inactive');
+            document.querySelector('body').classList.remove('noscroll');
         });
     })
 
@@ -129,6 +130,7 @@ function closePopup() {
             popupContent.classList.add('inactive');
             popupForm.classList.remove('active');
             popupForm.classList.add('inactive');
+            document.querySelector('body').classList.remove('noscroll');
         }
     })
 }
@@ -151,6 +153,7 @@ function adminDisplay() {
     btnEdit.addEventListener('click', (event) => {
         popup.classList.add('active');
         popupContent.classList.add('active');
+        document.querySelector('body').classList.add('noscroll');
     });
 }
 

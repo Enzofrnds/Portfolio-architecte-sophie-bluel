@@ -11,6 +11,10 @@
 	vertical-align: baseline;
 }
 
+.noscroll{
+	overflow: clip;
+}
+
 .inactive{
 	visibility: hidden;
 }
