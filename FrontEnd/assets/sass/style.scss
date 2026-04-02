@@ -84,15 +84,34 @@ a {
 		width: 630px;
 		height: 688px;
 		border-radius: 10px;
-		.ajout-img{
-			width: 75%;
+		.new-works{
+			width: 80%;
 			margin-top: 40px;
-			display: flex;
 			flex-direction: column;
 			justify-content: center;
 			align-items: center;
 			background-color: #E8F1F6;
-			padding: 25px;
+			img{;
+				width: 130px;
+				height: 100%;
+				object-fit: contain;
+			}
+		}
+		.form-active{
+			display: flex;
+		}
+		.form-inactive{
+			display: none;
+		}
+		.ajout-img{
+			width: 80%;
+			padding-top: 25px;
+			padding-bottom: 25px;
+			margin-top: 40px;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			background-color: #E8F1F6;
 			i{
 				color: #B9C5CC;
 				font-size: 4em;
@@ -142,7 +161,7 @@ a {
 				padding-left: 20px;
 			}
 		}
-		.btn-valider{
+		.btn-inactive{
 			display: block;
 			font-family: $font-family-title;
 			font-weight: 700;
@@ -155,6 +174,23 @@ a {
 			border-radius: 60px;
 			cursor: pointer;
 		}
+		.btn-active{
+			display: block;
+			font-family: $font-family-title;
+			font-weight: 700;
+			color: $white;
+			background-color: $primary-color;
+			margin: 2em auto;
+			padding: 10px;
+			width: 180px;
+			text-align: center;
+			border-radius: 60px;
+			cursor: pointer;
+			&:hover{
+				background-color: #0E2F28;
+			}
+		}
+
 		.popup-gallery{
 			display: grid;
 			grid-template-columns: repeat(5, 1fr);

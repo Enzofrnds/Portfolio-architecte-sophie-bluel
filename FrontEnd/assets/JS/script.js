@@ -162,6 +162,7 @@ function loadPopup(works) {
     loadPopupGallery(works);
     changePage(works);
     closePopup();
+    addWorks();
 }
 
 function changePage(works) {
@@ -225,4 +226,38 @@ async function refreshAllGalleries() {
     const updatedWorks = await getWorks();
     generateWorks(updatedWorks)
     loadPopupGallery(updatedWorks);
+}
+
+function addWorks() {
+    let fichier = null;
+
+    const btnAddWorks = document.getElementById('btn-photo');
+    const titleInput = document.getElementById('title');
+    const categorySelect = document.getElementById('category');
+    console.log(categorySelect.value);
+    const submitBtn = document.querySelector('.btn-valider');
+
+    function checkForm() {
+        if (fichier.value !== null && titleInput.value !== null && categorySelect.value > 0) {
+            submitBtn.classList.replace('btn-inactive', 'btn-active');
+        }else {
+            submitBtn.classList.replace('btn-active', 'btn-inactive');
+        }
+    }
+
+    btnAddWorks.addEventListener('change', (e) => {
+        fichier = e.target.files[0];
+
+        const addWorksContainer = document.querySelector('.ajout-img');
+        const newWorks = document.querySelector('.new-works');
+
+        newWorks.innerHTML = `
+            <img src="${URL.createObjectURL(fichier)}" alt="Aperçu de l'image">
+        `;
+        newWorks.classList.replace('form-inactive', 'form-active');
+        addWorksContainer.classList.replace('form-active', 'form-inactive');
+        checkForm();
+    });
+    titleInput.addEventListener('change', checkForm);
+    categorySelect.addEventListener('change', checkForm);
 }
