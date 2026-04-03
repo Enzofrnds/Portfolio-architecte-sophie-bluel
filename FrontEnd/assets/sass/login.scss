@@ -80,6 +80,9 @@ form {
         font-weight: 500;
         cursor: pointer;
         margin-top: 40px;
+        &:hover {
+            background-color: #0E2F28;
+        }
     }
 
     #error-message {
