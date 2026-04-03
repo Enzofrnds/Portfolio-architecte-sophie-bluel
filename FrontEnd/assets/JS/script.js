@@ -30,15 +30,16 @@ async function init() {
     const works = await getWorks();
     const categories = await getCategories();
     generateWorks(works);
-    setupFilters(works, categories);
+    setupCategory(works, categories);
     adminDisplay();
     Logout();
     loadPopup(works);
 }
 
-function setupFilters(works, categories) {
+function setupCategory(works, categories) {
     // génère les boutons de filtre en fonction des catégories passées en paramètre
     const filterContainer = document.querySelector('.filters');
+    const selectedCategory = document.querySelector('select');
 
     const btnTous = document.createElement('button');
     btnTous.classList.add('btn-filter', 'filter-active');
@@ -48,6 +49,10 @@ function setupFilters(works, categories) {
     // pour chaque catégorie, on crée un bouton de filtre
     categories.forEach((category) => {
         const btn = document.createElement('button');
+        const option = document.createElement('option');
+        option.value = category.id;
+        option.innerText = category.name;
+        selectedCategory.appendChild(option);
         btn.classList.add('btn-filter');
         btn.innerText = category.name;
         btn.dataset.id = category.id;
@@ -231,8 +236,10 @@ function addWorks() {
     let fichier = null;
 
     btnAddWorks.addEventListener('change', (e) => {
+        //recuperation du fichier
         fichier = e.target.files[0];
         if (fichier) {
+            //si il y a un ficher on met a jour le formulaire pour afficher un aperçu de l'image
             const addWorksContainer = document.querySelector('.ajout-img');
             const newWorks = document.querySelector('.new-works');
 
@@ -240,6 +247,7 @@ function addWorks() {
             newWorks.classList.replace('form-inactive', 'form-active');
             addWorksContainer.classList.replace('form-active', 'form-inactive');
         }
+        //verrification du formulaire pour activer ou désactiver le bouton de validation
         checkFormValidity(fichier, titleInput, categorySelect, submitBtn);
     });
 
@@ -253,11 +261,13 @@ function addWorks() {
         e.preventDefault(); // Prevent page reload
 
         if (submitBtn.classList.contains('btn-active')) {
+            //recuperation des informations du formulaire
             const formData = new FormData();
             formData.append('image', fichier);
             formData.append('title', titleInput.value);
             formData.append('category', categorySelect.value);
 
+            //requete POST pour ajouter un nouveau travail à l'API
             const response = await fetch('http://localhost:5678/api/works', {
                 method: 'POST',
                 headers: {
@@ -267,6 +277,7 @@ function addWorks() {
             });
 
             if (response.ok) {
+                //si la reponse est ok, on rafraichit les galeries et on réinitialise le formulaire
                 fichier = null;
                 refreshAllGalleries();
                 resetForm(titleInput, categorySelect, submitBtn);
@@ -276,13 +287,15 @@ function addWorks() {
 }
 
 function checkFormValidity(fichier, titleInput, categorySelect, submitBtn) {
-    if (fichier && titleInput.value.trim() !== '' && categorySelect.value > 0) {
+    //si tous les champs du formulaire sont remplis, on active le bouton de validation, sinon on le désactive
+    if (fichier && titleInput.value() !== '' && categorySelect.value > 0) {
         submitBtn.classList.replace('btn-inactive', 'btn-active');
     } else {
         submitBtn.classList.replace('btn-active', 'btn-inactive');
     }
 }
 
+//fonction pour reinitialiser le formulaire
 function resetForm(title, category, submitBtn) {
     title.value = '';
     category.value = 0;
