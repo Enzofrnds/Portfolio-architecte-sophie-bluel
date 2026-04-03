@@ -223,55 +223,75 @@ async function refreshAllGalleries() {
 }
 
 function addWorks() {
-    let fichier = null;
-
     const btnAddWorks = document.getElementById('btn-photo');
     const titleInput = document.getElementById('title');
     const categorySelect = document.getElementById('category');
-    console.log(categorySelect.value);
     const submitBtn = document.querySelector('.btn-valider');
 
-    function checkForm() {
-        if (
-            fichier !== null &&
-            titleInput.value !== null &&
-            categorySelect.value > 0
-        ) {
-            submitBtn.classList.replace('btn-inactive', 'btn-active');
-            submitBtn.addEventListener('click', async () => {
-                const formData = new FormData();
-                formData.append('image', fichier);
-                formData.append('title', titleInput.value);
-                formData.append('category', categorySelect.value);
-                const response = await fetch('http://localhost:5678/api/works', {
-                    method: 'POST',
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token')}`,
-                    },
-                    body: formData,
-                });
-                if (response.ok) {
-                    refreshAllGalleries();
-                }
-            });
-        } else {
-            submitBtn.classList.replace('btn-active', 'btn-inactive');
-        }
-    }
+    let fichier = null;
 
     btnAddWorks.addEventListener('change', (e) => {
         fichier = e.target.files[0];
+        if (fichier) {
+            const addWorksContainer = document.querySelector('.ajout-img');
+            const newWorks = document.querySelector('.new-works');
 
-        const addWorksContainer = document.querySelector('.ajout-img');
-        const newWorks = document.querySelector('.new-works');
-
-        newWorks.innerHTML = `
-            <img src="${URL.createObjectURL(fichier)}" alt="Aperçu de l'image">
-        `;
-        newWorks.classList.replace('form-inactive', 'form-active');
-        addWorksContainer.classList.replace('form-active', 'form-inactive');
-        checkForm();
+            newWorks.innerHTML = `<img src="${URL.createObjectURL(fichier)}" alt="Aperçu">`;
+            newWorks.classList.replace('form-inactive', 'form-active');
+            addWorksContainer.classList.replace('form-active', 'form-inactive');
+        }
+        checkFormValidity(fichier, titleInput, categorySelect, submitBtn);
     });
-    titleInput.addEventListener('change', checkForm);
-    categorySelect.addEventListener('change', checkForm);
+
+    [titleInput, categorySelect].forEach((input) => {
+        input.addEventListener('input', () => {
+            checkFormValidity(fichier, titleInput, categorySelect, submitBtn);
+        });
+    });
+
+    submitBtn.addEventListener('click', async (e) => {
+        e.preventDefault(); // Prevent page reload
+
+        if (submitBtn.classList.contains('btn-active')) {
+            const formData = new FormData();
+            formData.append('image', fichier);
+            formData.append('title', titleInput.value);
+            formData.append('category', categorySelect.value);
+
+            const response = await fetch('http://localhost:5678/api/works', {
+                method: 'POST',
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+                body: formData,
+            });
+
+            if (response.ok) {
+                fichier = null;
+                refreshAllGalleries();
+                resetForm(titleInput, categorySelect, submitBtn);
+            }
+        }
+    });
+}
+
+function checkFormValidity(fichier, titleInput, categorySelect, submitBtn) {
+    if (fichier && titleInput.value.trim() !== '' && categorySelect.value > 0) {
+        submitBtn.classList.replace('btn-inactive', 'btn-active');
+    } else {
+        submitBtn.classList.replace('btn-active', 'btn-inactive');
+    }
+}
+
+function resetForm(title, category, submitBtn) {
+    title.value = '';
+    category.value = 0;
+
+    const addWorksContainer = document.querySelector('.ajout-img');
+    const newWorks = document.querySelector('.new-works');
+
+    newWorks.innerHTML = '';
+    newWorks.classList.replace('form-active', 'form-inactive');
+    addWorksContainer.classList.replace('form-inactive', 'form-active');
+    submitBtn.classList.replace('btn-active', 'btn-inactive');
 }
