@@ -134,7 +134,7 @@ function adminDisplay() {
         btnEdit.classList.replace('inactive', 'active');
     }
 
-    btnEdit.addEventListener('click', (event) => {
+    btnEdit.addEventListener('click', () => {
         popup.classList.add('active');
         popupContent.classList.add('active');
         document.querySelector('body').classList.add('noscroll');
@@ -161,7 +161,7 @@ function loadPopup(works) {
     });
 }
 
-function changePage(works) {
+function changePage() {
     // au clic sur le bouton "Ajouter une photo", on change le contenu de la popup pour afficher le formulaire d'ajout de photo
     const btnAddPhoto = document.querySelector('.btn-add-photo');
     btnAddPhoto.addEventListener('click', () => {

@@ -10,7 +10,7 @@
           rel="stylesheet">
     <link crossorigin="anonymous" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
           integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
-          referrerpolicy="no-referrer" rel="stylesheet"/>
+          referrerpolicy="no-referrer" rel="stylesheet">
     <meta content="" name="description">
     <link href="assets/css/style.css" rel="stylesheet">
 </head>
@@ -36,12 +36,12 @@
             <input accept="image/*" class="input-file" id="btn-photo" type="file">
             <p>jpg, png : 4mo max</p>
         </div>
-        <form action="">
+        <form>
             <label for="title">Titre</label>
             <input id="title" name="title" type="text">
             <label for="category">Catégorie</label>
             <select id="category" name="category">
-                <option value="0"></option>
+                <option value="0" label=" "></option>
             </select>
         </form>
         <span class="popup-border"></span>
@@ -64,7 +64,7 @@
     </nav>
 </header>
 <main>
-    <section id="introduction">
+    <div  id="introduction">
         <figure>
             <img alt="" src="./assets/images/sophie-bluel.png">
         </figure>
@@ -78,12 +78,12 @@
             <p>En cas de besoin, une équipe pluridisciplinaire peut-être constituée : architecte DPLG,
                 décorateur(trice)</p>
         </article>
-    </section>
+    </div>
     <section id="portfolio">
         <h2>Mes Projets</h2>
         <button class="btn-edit inactive">
             <i class="fa-solid fa-pen-to-square"></i>
-            <p>modifier</p>
+            <span>modifier</span>
         </button>
         <div class="filters active">
         </div>
@@ -112,6 +112,6 @@
         </ul>
     </nav>
 </footer>
-</body>
 <script src="./assets/JS/script.js"></script>
+</body>
 </html>
