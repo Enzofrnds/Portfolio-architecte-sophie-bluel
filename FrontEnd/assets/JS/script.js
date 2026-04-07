@@ -110,28 +110,14 @@ const popupContent = document.querySelector('.popup-content');
 const popupForm = document.querySelector('.popup-form');
 
 function closePopup() {
-    const btnsClose = document.querySelectorAll('.fa-xmark');
-    btnsClose.forEach((btn) => {
-        btn.addEventListener('click', () => {
-            popup.classList.remove('active');
-            popup.classList.add('inactive');
-            popupContent.classList.remove('active');
-            popupContent.classList.add('inactive');
-            popupForm.classList.remove('active');
-            popupForm.classList.add('inactive');
-            document.querySelector('body').classList.remove('noscroll');
-        });
-    });
+        popup.classList.replace('active', 'inactive');
+        popupContent.classList.replace('active', 'inactive');
+        popupForm.classList.replace('active', 'inactive');
+        document.querySelector('body').classList.remove('noscroll');
 
     popup.addEventListener('click', (event) => {
         if (event.target === popup) {
-            popup.classList.remove('active');
-            popup.classList.add('inactive');
-            popupContent.classList.remove('active');
-            popupContent.classList.add('inactive');
-            popupForm.classList.remove('active');
-            popupForm.classList.add('inactive');
-            document.querySelector('body').classList.remove('noscroll');
+
         }
     });
 }
@@ -143,12 +129,9 @@ function adminDisplay() {
     const filterContainer = document.querySelector('.filters');
     const btnEdit = document.querySelector('.btn-edit');
     if (token) {
-        edit.classList.remove('inactive');
-        edit.classList.add('active');
-        filterContainer.classList.add('inactive');
-        filterContainer.classList.remove('active');
-        btnEdit.classList.remove('inactive');
-        btnEdit.classList.add('active');
+        edit.classList.replace('inactive', 'active');
+        filterContainer.classList.replace('active', 'inactive');
+        btnEdit.classList.replace('inactive', 'active');
     }
 
     btnEdit.addEventListener('click', (event) => {
@@ -163,24 +146,33 @@ function loadPopup(works) {
     changePage(works);
     closePopup();
     addWorks();
+
+    const btnsClose = document.querySelectorAll('.fa-xmark');
+    btnsClose.forEach((btn) => {
+        btn.addEventListener('click', () => {
+            closePopup();
+        });
+    });
+
+    popup.addEventListener('click', (event) => {
+        if (event.target === popup) {
+            closePopup();
+        }
+    });
 }
 
 function changePage(works) {
     // au clic sur le bouton "Ajouter une photo", on change le contenu de la popup pour afficher le formulaire d'ajout de photo
     const btnAddPhoto = document.querySelector('.btn-add-photo');
     btnAddPhoto.addEventListener('click', () => {
-        popupContent.classList.remove('active');
-        popupContent.classList.add('inactive');
-        popupForm.classList.remove('inactive');
-        popupForm.classList.add('active');
+        popupContent.classList.replace('active', 'inactive');
+        popupForm.classList.replace('inactive', 'active');
 
         // ajout des eventListener pour les boutons
         const btnBack = document.querySelector('.fa-arrow-left');
         btnBack.addEventListener('click', () => {
-            popupForm.classList.remove('active');
-            popupForm.classList.add('inactive');
-            popupContent.classList.remove('inactive');
-            popupContent.classList.add('active');
+            popupForm.classList.replace('active', 'inactive');
+            popupContent.classList.replace('inactive', 'active');
         });
     });
 }
