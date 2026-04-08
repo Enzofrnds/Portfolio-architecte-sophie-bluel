@@ -280,7 +280,7 @@ function addWorks() {
 
 function checkFormValidity(fichier, titleInput, categorySelect, submitBtn) {
     //si tous les champs du formulaire sont remplis, on active le bouton de validation, sinon on le désactive
-    if (fichier && titleInput.value() !== '' && categorySelect.value > 0) {
+    if (fichier && titleInput.value !== '' && categorySelect.value > 0) {
         submitBtn.classList.replace('btn-inactive', 'btn-active');
     } else {
         submitBtn.classList.replace('btn-active', 'btn-inactive');
