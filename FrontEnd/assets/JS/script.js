@@ -10,7 +10,7 @@ async function getCategories() {
     return await reponse.json();
 }
 
-function generateWorks(works) {
+function displayWorks(works) {
     // génère le contenu de la galerie en fonction des travaux passés en paramètre
     const gallery = document.querySelector('.gallery');
     gallery.innerHTML = '';
@@ -26,37 +26,28 @@ function generateWorks(works) {
     });
 }
 
-async function init() {
-    const works = await getWorks();
-    const categories = await getCategories();
-    generateWorks(works);
-    setupCategory(works, categories);
-    adminDisplay();
-    Logout();
-    loadPopup(works);
-}
-
 function setupCategory(works, categories) {
     // génère les boutons de filtre en fonction des catégories passées en paramètre
     const filterContainer = document.querySelector('.filters');
     const selectedCategory = document.querySelector('select');
 
     const btnTous = document.createElement('button');
-    btnTous.classList.add('btn-filter', 'filter-active');
+    btnTous.classList.add('btn-filter', 'fliter-active');
     btnTous.innerText = 'Tous';
     filterContainer.appendChild(btnTous);
 
     // pour chaque catégorie, on crée un bouton de filtre
     categories.forEach((category) => {
         const btn = document.createElement('button');
-        const option = document.createElement('option');
-        option.value = category.id;
-        option.innerText = category.name;
-        selectedCategory.appendChild(option);
         btn.classList.add('btn-filter');
         btn.innerText = category.name;
         btn.dataset.id = category.id;
         filterContainer.appendChild(btn);
+
+        const option = document.createElement('option');
+        option.value = category.id;
+        option.innerText = category.name;
+        selectedCategory.appendChild(option);
     });
 
     const btns = document.querySelectorAll('.btn-filter');
@@ -64,8 +55,8 @@ function setupCategory(works, categories) {
     // au clic sur un bouton de filtre, on met à jour la galerie pour n'afficher que les travaux correspondant à la catégorie sélectionnée
     btns.forEach((btn) => {
         btn.addEventListener('click', () => {
-            btns.forEach((btn) => btn.classList.remove('active'));
-            btn.classList.add('active');
+            btns.forEach((btn) => btn.classList.remove('fliter-active'));
+            btn.classList.add('fliter-active');
 
             const categoryName = btn.innerText;
 
@@ -79,10 +70,13 @@ function setupCategory(works, categories) {
                 );
             }
 
-            generateWorks(filteredWorks);
+            displayWorks(filteredWorks);
         });
     });
 }
+
+
+
 
 function Logout() {
     const token = localStorage.getItem('token');
@@ -100,8 +94,6 @@ function Logout() {
         });
     }
 }
-
-init();
 
 //POPUP//
 
@@ -141,41 +133,8 @@ function adminDisplay() {
     });
 }
 
-function loadPopup(works) {
-    loadPopupGallery(works);
-    changePage(works);
-    closePopup();
-    addWorks();
 
-    const btnsClose = document.querySelectorAll('.fa-xmark');
-    btnsClose.forEach((btn) => {
-        btn.addEventListener('click', () => {
-            closePopup();
-        });
-    });
 
-    popup.addEventListener('click', (event) => {
-        if (event.target === popup) {
-            closePopup();
-        }
-    });
-}
-
-function changePage() {
-    // au clic sur le bouton "Ajouter une photo", on change le contenu de la popup pour afficher le formulaire d'ajout de photo
-    const btnAddPhoto = document.querySelector('.btn-add-photo');
-    btnAddPhoto.addEventListener('click', () => {
-        popupContent.classList.replace('active', 'inactive');
-        popupForm.classList.replace('inactive', 'active');
-
-        // ajout des eventListener pour les boutons
-        const btnBack = document.querySelector('.fa-arrow-left');
-        btnBack.addEventListener('click', () => {
-            popupForm.classList.replace('active', 'inactive');
-            popupContent.classList.replace('inactive', 'active');
-        });
-    });
-}
 
 function loadPopupGallery(works) {
     //ajout des éléments de la galerie dans la popup
@@ -212,12 +171,7 @@ async function deleteWork(workId) {
     return response.ok;
 }
 
-async function refreshAllGalleries() {
-    // récupère la liste des travaux à jour, régénère la galerie principale et la galerie de la popup
-    const updatedWorks = await getWorks();
-    generateWorks(updatedWorks);
-    loadPopupGallery(updatedWorks);
-}
+
 
 function addWorks() {
     const btnAddWorks = document.getElementById('btn-photo');
@@ -250,7 +204,7 @@ function addWorks() {
     });
 
     submitBtn.addEventListener('click', async (e) => {
-        e.preventDefault(); // Prevent page reload
+        e.preventDefault();
 
         if (submitBtn.classList.contains('btn-active')) {
             //recuperation des informations du formulaire
@@ -287,7 +241,29 @@ function checkFormValidity(fichier, titleInput, categorySelect, submitBtn) {
     }
 }
 
-//fonction pour reinitialiser le formulaire
+async function refreshAllGalleries() {
+    // récupère la liste des travaux à jour, régénère la galerie principale et la galerie de la popup
+    const updatedWorks = await getWorks();
+    displayWorks(updatedWorks);
+    loadPopupGallery(updatedWorks);
+}
+
+function changePage() {
+    // au clic sur le bouton "Ajouter une photo", on change le contenu de la popup pour afficher le formulaire d'ajout de photo
+    const btnAddPhoto = document.querySelector('.btn-add-photo');
+    btnAddPhoto.addEventListener('click', () => {
+        popupContent.classList.replace('active', 'inactive');
+        popupForm.classList.replace('inactive', 'active');
+
+        // ajout des eventListener pour les boutons
+        const btnBack = document.querySelector('.fa-arrow-left');
+        btnBack.addEventListener('click', () => {
+            popupForm.classList.replace('active', 'inactive');
+            popupContent.classList.replace('inactive', 'active');
+        });
+    });
+}
+
 function resetForm(title, category, submitBtn) {
     title.value = '';
     category.value = 0;
@@ -300,3 +276,35 @@ function resetForm(title, category, submitBtn) {
     addWorksContainer.classList.replace('form-inactive', 'form-active');
     submitBtn.classList.replace('btn-active', 'btn-inactive');
 }
+
+function loadPopup(works) {
+    loadPopupGallery(works);
+    changePage(works);
+    closePopup();
+    addWorks();
+
+    const btnsClose = document.querySelectorAll('.fa-xmark');
+    btnsClose.forEach((btn) => {
+        btn.addEventListener('click', () => {
+            closePopup();
+        });
+    });
+
+    popup.addEventListener('click', (event) => {
+        if (event.target === popup) {
+            closePopup();
+        }
+    });
+}
+
+async function init() {
+    const works = await getWorks();
+    const categories = await getCategories();
+    displayWorks(works);
+    setupCategory(works, categories);
+    adminDisplay();
+    Logout();
+    loadPopup(works);
+}
+
+init();

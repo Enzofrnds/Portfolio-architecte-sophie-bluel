@@ -194,6 +194,7 @@ a {
 }
 .popup .popup-content form #title {
   width: 80%;
+  max-width: 500px;
   height: 51px;
   border-radius: 5px;
   padding: 0 10px;
@@ -430,6 +431,9 @@ main {
   text-align: center;
   border-radius: 60px;
   cursor: pointer;
+}
+#contact form input[type=submit]:hover {
+  background-color: #0E2F28;
 }
 #contact form label {
   margin: 2em 0 1em 0;
